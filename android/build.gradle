@@ -20,16 +20,19 @@ buildscript {
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.1"
-
-    defaultConfig {
+    compileSdkVersion 27
+    buildToolsVersion "27.0.2"
+    
+	/*
+	defaultConfig {
         minSdkVersion 16
         targetSdkVersion 22
         versionCode 1
         // get version name from package.json version
         versionName computeVersionName()
     }
+	*/
+    
     lintOptions {
         abortOnError false
     }
