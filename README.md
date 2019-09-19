@@ -1,6 +1,7 @@
 This is modified version of this [CMP Studio library](https://github.com/CMP-Studio/react-native-android-alarms). Tested on RN 0.57.8.
 
 This React Native library will allow you to schedule and show alarms on Android (tested on >= API 21). To see a working example of this module (original one), see [Dawn Chorus](https://github.com/CMP-Studio/DawnChorus). The code for this module was modified from [Christoph Michel's App Launcher](https://github.com/MrToph/react-native-app-launcher).
+Here is another [example](https://github.com/vasyl91/muse-sleep-tracker-and-arduino-light-therapy) of implemented module.
 
 ## Features
 * Schedules alarms using AlarmManager
