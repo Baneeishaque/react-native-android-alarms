@@ -210,7 +210,7 @@ Here is another [example](https://github.com/vasyl91/muse-sleep-tracker-and-ardu
  /* 
  Imitates home button and programatically minimizes app. 
  Might be usefull because if app is in foreground FLAG_KEEP_SCREEN_ON prevents android from turning screen off. 
- If you assotiate this method with e.g. dismiss/snooze button you will minimize your the app while tapping on it and android will turn the screen off shortly after. 
+ If you assotiate this method with e.g. dismiss/snooze button you will minimize the app while tapping on it and android will turn the screen off shortly after. 
  */
  AndroidAlarms.minimizeApp(); 
  ```
