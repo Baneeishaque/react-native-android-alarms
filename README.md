@@ -1,4 +1,4 @@
-This is modified version of this [CMP Studio library](https://github.com/CMP-Studio/react-native-android-alarms). Tested on RN 0.57.8.
+This is modified version of this [CMP Studio library](https://github.com/CMP-Studio/react-native-android-alarms). Tested on RN 0.61.5.
 
 This React Native library will allow you to schedule and show alarms on Android (tested on >= API 21). To see a working example of this module (original one), see [Dawn Chorus](https://github.com/CMP-Studio/DawnChorus). The code for this module was modified from [Christoph Michel's App Launcher](https://github.com/MrToph/react-native-app-launcher).
 Here is another [example](https://github.com/vasyl91/muse-sleep-tracker-and-arduino-light-therapy) of implemented module.
@@ -20,19 +20,19 @@ Here is another [example](https://github.com/vasyl91/muse-sleep-tracker-and-ardu
     yarn add https://github.com/vasyl91/react-native-android-alarms.git
     ```
 
-* Add the following to `android/settings.gradle`:
+* (for RN without autolinking support) Add the following to `android/settings.gradle`:
     ```
     include ':react-native-android-alarms'
     project(':react-native-android-alarms').projectDir = new File(settingsDir, '../node_modules/react-native-android-alarms/android')
     ```
 
-* Add the following to `android/app/build.gradle`:
+* (for RN without autolinking support) Add the following to `android/app/build.gradle`:
     ```xml
     ...
 
     dependencies {
         ...
-        compile project(':react-native-android-alarms') 
+        implementation project(':react-native-android-alarms') 
     }
     ```
 * Add the following to `android/app/src/main/AndroidManifest.xml`:
@@ -91,7 +91,9 @@ Here is another [example](https://github.com/vasyl91/muse-sleep-tracker-and-ardu
 	package com.your_app_name;
 
 	import android.app.Activity;
+	import android.app.KeyguardManager;
 	import android.content.Intent;
+	import android.os.Build;
 	import android.os.Bundle;
 	import android.view.Window;
 	import android.view.WindowManager;
@@ -115,12 +117,17 @@ Here is another [example](https://github.com/vasyl91/muse-sleep-tracker-and-ardu
 		super.onCreate(savedInstanceState);
 		// Add
 		final Window win = getWindow();
-		win.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
-			WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
-			WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
-			WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
-			WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON);
-	    }
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // for API >= 27
+		    setShowWhenLocked(true);
+		    setTurnScreenOn(true);
+		    KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Activity.KEYGUARD_SERVICE);
+		    keyguardManager.requestDismissKeyguard(this, null);
+		} else {
+		    win.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+			    WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
+			    WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
+			    WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON);
+		}
 
 	    // Add
 	    public class AlarmActivityDelegate extends ReactActivityDelegate {
