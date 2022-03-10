@@ -8,7 +8,7 @@ export default class AndroidAlarms {
    * UNIX timestamp `timestamp`. If parameter `inexact` is set to true, the battery-saving version of
    * AlarmManager is used that can fire at inexact times. Default value for `inexact` is false.
    */
-  static setAlarm(id, timestamp, inexact) {
+  static setAlarm(id, timestamp, inexact, repeats) {
     if (!(typeof id === 'string' || typeof id === 'number'))
       throw new Error(
         'AndroidAlarms.setAlarm: `id` must be a number or a string.'
@@ -20,23 +20,10 @@ export default class AndroidAlarms {
     id = id.toString(); // parse to string
     timestamp = Math.trunc(timestamp); // parse to int
     inexact = !!inexact; // parse to bool
-    NativeModules.AndroidAlarms.setAlarm(id, timestamp, inexact);
+    repeats = !!repeats;
+    NativeModules.AndroidAlarms.setAlarm(id, timestamp, inexact, repeats);
   }
 
-  static setRepeatedAlarm(id, timestamp) {
-    if (!(typeof id === 'string' || typeof id === 'number'))
-      throw new Error(
-        'AndroidAlarms.setAlarm: `id` must be a number or a string.'
-      );
-    if (typeof timestamp !== 'number')
-      throw new Error(
-        'AndroidAlarms.setAlarm: `timestamp` must be an integer.'
-      );
-    id = id.toString(); // parse to string
-    timestamp = Math.trunc(timestamp); // parse to int
-
-    NativeModules.AndroidAlarms.setRepeatedAlarm(id, timestamp);
-  }
   /**
    * Clears the alarm specified by `id`
    */
