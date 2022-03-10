@@ -4,28 +4,26 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Build;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
-import android.util.Log;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Build;
+import android.util.Log;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.ReactActivity;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.io.IOException;
 
 public class LauncherModule extends ReactContextBaseJavaModule {
 
   private MediaPlayer mediaPlayer;
-  private Uri uri;
-  private ReactApplicationContext reactContext;
+  private final Uri uri;
+  private final ReactApplicationContext reactContext;
 
   public LauncherModule(ReactApplicationContext reactContext) {
     super(reactContext);
@@ -52,8 +50,7 @@ public class LauncherModule extends ReactContextBaseJavaModule {
 
   @Override
   public Map<String, Object> getConstants() {
-    final Map<String, Object> constants = new HashMap<>();
-    return constants;
+    return new HashMap<>();
   }
 
   // Runs android alarm ringtone
@@ -67,7 +64,7 @@ public class LauncherModule extends ReactContextBaseJavaModule {
       mediaPlayer.prepare();
       mediaPlayer.start();
     } catch (Exception ex) {
-      Log.i("ALARM MESSAGE", (ex == null ? "Error Message was null" : ex.getMessage()));
+      Log.i("ALARM MESSAGE", ex.getMessage());
       ex.printStackTrace();
     }
   }
@@ -96,7 +93,7 @@ public class LauncherModule extends ReactContextBaseJavaModule {
    * @param timestamp When to fire off the alarm.
    * @param inexact   Determines if the alarm should be inexact to save on battery
    *                  power.
-   * @param repeats Wether the alarm repeats the same day every week or not
+   * @param repeats Whether the alarm repeats the same day every week or not
    */
   @ReactMethod
   public final void setAlarm(String id, double timestamp, boolean inexact, boolean repeats) {
@@ -113,7 +110,7 @@ public class LauncherModule extends ReactContextBaseJavaModule {
     SharedPreferences.Editor editor = alarms.edit();
     editor.putLong(id, timestampLong);
     // Commit the edits!
-    editor.commit();
+    editor.apply();
 
     if (repeats) {
         getAlarmManager().setRepeating(AlarmManager.RTC_WAKEUP, timestampLong,AlarmManager.INTERVAL_DAY * 7, pendingIntent);
@@ -129,8 +126,6 @@ public class LauncherModule extends ReactContextBaseJavaModule {
             getAlarmManager().set(AlarmManager.RTC_WAKEUP, timestampLong, pendingIntent);
         }
     }
-
-    Context context = getReactApplicationContext();
   }
 
   @ReactMethod
@@ -139,7 +134,7 @@ public class LauncherModule extends ReactContextBaseJavaModule {
     SharedPreferences alarms = getReactApplicationContext().getSharedPreferences("Alarms", 0);
     SharedPreferences.Editor editor = alarms.edit();
     editor.remove(id);
-    editor.commit();
+    editor.apply();
 
     PendingIntent pendingIntent = createPendingIntent(id);
     getAlarmManager().cancel(pendingIntent);

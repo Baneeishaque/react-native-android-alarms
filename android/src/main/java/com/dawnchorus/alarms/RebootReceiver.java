@@ -17,13 +17,12 @@ public class RebootReceiver extends BroadcastReceiver {
 
             if (null == service) {
                 Log.e("TAG", "Could not start service ");
-            }
-            else {
+            } else {
                 Log.e("TAG", "Successfully started service ");
             }
 
         } else {
-        Log.e("TAG", "Received unexpected intent " + intent.toString());
+            Log.e("TAG", "Received unexpected intent " + intent);
         }
     }
 
